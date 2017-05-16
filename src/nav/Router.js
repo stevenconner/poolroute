@@ -1,5 +1,5 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import LoadingScreen from '../screens/LoadingScreen';
@@ -8,6 +8,31 @@ import ClientList from '../screens/ClientList';
 import DayScreen from '../screens/DayScreen';
 import EquipmentScreen from '../screens/EquipmentScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import NewEquipmentScreen from '../screens/NewEquipmentScreen';
+
+const EquipmentStack = StackNavigator({
+    EquipmentScreen: {
+        screen: EquipmentScreen,
+    },
+    NewEquipmentScreen: {
+        screen: NewEquipmentScreen,
+    },
+    }, {
+        initialRouteName: 'NewEquipmentScreen',
+        navigationOptions: {
+            gesturesEnabled: false,
+            tabBarLabel: 'Supplies',
+            tabBarIcon: ({ tintColor }) => (
+                <Icon
+                    name='beaker'
+                    type='material-community'
+                    color={tintColor}
+                    size={30}
+                />
+            ),
+            header: null,
+        }
+    })
 
 const TabsNavigator = TabNavigator({
     DayScreen: {
@@ -42,20 +67,11 @@ const TabsNavigator = TabNavigator({
             )
         }
     },
-    EquipmentScreen: {
-        screen: EquipmentScreen,
+    Equipment: {
+        screen: EquipmentStack,
         navigationOptions: {
             gesturesEnabled: false,
             header: null,
-            tabBarLabel: 'Supplies',
-            tabBarIcon: ({ tintColor }) => (
-                <Icon
-                    name='beaker'
-                    type='material-community'
-                    color={tintColor}
-                    size={30}
-                />
-            )
         }
     },
     SettingsScreen: {
@@ -75,8 +91,9 @@ const TabsNavigator = TabNavigator({
         }
     }
     }, {
-        initialRouteName: 'DayScreen',
+        initialRouteName: 'Equipment',
     });
+
 
 export const Routes = {
     LoadingScreen: {
