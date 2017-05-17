@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateClient } from '../actions';
 
-import { View, Text, Alert, TextInput } from 'react-native';
+import { View, Text, Alert, TextInput, Modal } from 'react-native';
 import { Button, Header } from '../components/common';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Menu, { MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-native-menu';
 
 class ClientDetails extends React.Component {
     state = {
+        modalVisible: false,
         editing: false,
         name: '',
         address: '',
@@ -25,6 +26,10 @@ class ClientDetails extends React.Component {
             phone: item.phone,
             accountType: item.type,
         })
+    }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible })
     }
 
     handleSavePress() {
@@ -108,6 +113,18 @@ class ClientDetails extends React.Component {
                     <Text style={styles.textStyle}>{item.address}</Text>
                     <Text style={styles.textStyle}>{item.phone}</Text>
                     <Text style={[styles.textStyle, { marginTop: 20 }]}>Account Type: {item.type}</Text>
+                    <Button onPress={() => this.setModalVisible(true)} style={{ marginTop: 15 }}>Add Equipment</Button>
+                    <Modal
+                        animationType={'fade'}
+                        transparent={false}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => console.log('modal closed')}
+                    >
+                        <View style={styles.modalStyle}>
+                            <Text>Choose Equipment</Text>
+                            <Button onPress={() => this.setModalVisible(false)}>Close</Button>
+                        </View>
+                    </Modal>
                 </View>
             )
         }
@@ -166,7 +183,27 @@ const styles = {
         borderRadius: 4,
         marginBottom: 5,
         padding: 5,
-    }
+    },
+    modalStyle: {
+        borderColor: '#676769',
+        borderRadius: 10,
+        borderWidth: 1,
+        marginTop: '50%',
+        backgroundColor: '#fff',
+        height: '50%',
+        width: '95%',
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+}
+
+const mapStateToProps = state => {
+    const { root } = state.data;
+
+    return { root };
 }
 
 export default connect(null, { updateClient })(ClientDetails);
