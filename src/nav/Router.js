@@ -10,6 +10,37 @@ import EquipmentScreen from '../screens/EquipmentScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import NewEquipmentScreen from '../screens/NewEquipmentScreen';
 import EquipmentDetails from '../screens/EquipmentDetails';
+import NewClientScreen from '../screens/NewClientScreen';
+import ClientDetails from '../screens/ClientDetails';
+
+const ClientStack = StackNavigator({
+    ClientList: {
+        screen: ClientList,
+    },
+    NewClientScreen: {
+        screen: NewClientScreen,
+    },
+    ClientDetails: {
+        screen: ClientDetails,
+    }
+    }, {
+        initialRouteName: 'ClientList',
+        mode: 'card',
+        cardStyle: { shadowColor: 'transparent' },
+        navigationOptions: {
+            gesturesEnabled: false,
+            tabBarLabel: 'Clients',
+            tabBarIcon: ({ tintColor }) => (
+                <Icon
+                    name='view-list'
+                    type='material-community'
+                    color={tintColor}
+                    size={35}
+                />
+            ),
+            header: null,
+        }
+    })
 
 const EquipmentStack = StackNavigator({
     EquipmentScreen: {
@@ -55,28 +86,11 @@ const TabsNavigator = TabNavigator({
             )
         }
     },
-    ClientList: {
-        screen: ClientList,
-        navigationOptions: {
-            gesturesEnabled: false,
-            header: null,
-            tabBarLabel: 'Clients',
-            tabBarIcon: ({ tintColor }) => (
-                <Icon
-                    name='view-list'
-                    type='material-community'
-                    color={tintColor}
-                    size={35}
-                />
-            )
-        }
+    Clients: {
+        screen: ClientStack,
     },
     Equipment: {
         screen: EquipmentStack,
-        navigationOptions: {
-            gesturesEnabled: false,
-            header: null,
-        }
     },
     SettingsScreen: {
         screen: SettingsScreen,
@@ -95,7 +109,7 @@ const TabsNavigator = TabNavigator({
         }
     }
     }, {
-        initialRouteName: 'Equipment',
+        initialRouteName: 'Clients',
     });
 
 

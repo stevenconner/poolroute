@@ -4,7 +4,10 @@ import {
     WATCH_USER_DATA,
     ITEM_SAVE,
     ITEM_SAVE_SUCCESS,
-    ITEM_SAVE_FAIL
+    ITEM_SAVE_FAIL,
+    CLIENT_SAVE,
+    CLIENT_SAVE_SUCCESS,
+    CLIENT_SAVE_FAIL
 } from './types';
 
 export const watchUserData = (nav, navscreen) => {
@@ -19,6 +22,34 @@ export const watchUserData = (nav, navscreen) => {
                 dispatch({ type: WATCH_USER_DATA, payload: snapshot.val() });
             })
         nav.navigate(navscreen);
+    }
+}
+
+export const saveNewClient = (value) => {
+    console.log('saveNewClient fired!', value);
+    let { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        dispatch({ type: CLIENT_SAVE })
+        firebase.database().ref(`/${currentUser.uid}/clients`)
+            .push(value)
+            .then(() => {
+                dispatch({ type: CLIENT_SAVE_SUCCESS })
+            })
+            .catch((error) => {
+                dispatch({ type: CLIENT_SAVE_FAIL })
+                console.log('Client save failed, here is the error', error);
+            })
+    }
+}
+
+export const updateClient = (uid, value) => {
+    console.log('updateClient fired!');
+    let { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        firebase.database().ref(`/${currentUser.uid}/clients/${uid}`)
+            .update(value);
     }
 }
 

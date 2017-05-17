@@ -23,7 +23,6 @@ class EquipmentScreen extends React.Component {
     _keyExtractor = (item, index) => item.uid;
 
     render() {
-        console.log('here is data', this.props)
         return (
             <View style={styles.containerStyle}>
                 <Header
@@ -37,6 +36,8 @@ class EquipmentScreen extends React.Component {
                         renderSectionHeader={this.renderHeader}
                         sections={this.props.suppliesList}
                         keyExtractor={this._keyExtractor}
+                        removeClippedSubviews={false}
+                        initialListSize={20}
                     />
                 </View>
             </View>

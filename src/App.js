@@ -5,6 +5,7 @@ import { Routes } from './nav/Router';
 import getStore from './state/Store';
 import firebase from 'firebase';
 
+import Menu, { MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-native-menu';
 import { View, Text, BackAndroid } from 'react-native';
 
 const AppNavigator = StackNavigator(Routes, {
@@ -83,7 +84,9 @@ class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppWithNavigationState />
+                <MenuContext style={{ flex: 1 }}>
+                    <AppWithNavigationState />
+                </MenuContext>
             </Provider>
         )
     }

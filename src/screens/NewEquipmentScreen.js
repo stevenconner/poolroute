@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { saveNewItem } from '../actions';
 
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { Button, Header } from '../components/common';
 import t from 'tcomb-form-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 var Form = t.form.Form;
 var NewItem = t.struct({
@@ -49,15 +50,16 @@ class NewEquipmentScreen extends React.Component {
                     leftText={'Back'}
                     centerText={'New Item'}
                 />
-                <View style={styles.contentContainer}>
+                <KeyboardAwareScrollView contentContainerStyle={styles.contentContainer}>
                     <Form
                         ref='form'
                         type={NewItem}
                         value={this.state.value}
+                        options={options}
                     />
                     <Text style={styles.errorText}>{this.props.error}</Text>
                     <Button onPress={() => this.handleSavePress()}>Save</Button>
-                </View>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
