@@ -21,11 +21,14 @@ const styles = {
 
     },
     viewStyle: {
-        height: 30,
+        height: 40,
         justifyContent: 'center',
+        borderBottomWidth: 1,
+        borderColor: '#eee',
+        paddingHorizontal: 10,
     },
     textStyle: {
-        fontSize: 18,
+        fontSize: 20,
     }
 }
 

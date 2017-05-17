@@ -15,6 +15,7 @@ export const watchUserData = (nav, navscreen) => {
     return (dispatch) => {
         firebase.database().ref(`/${currentUser.uid}`)
             .on('value', snapshot => {
+                console.log('here is snapshot', snapshot.val())
                 dispatch({ type: WATCH_USER_DATA, payload: snapshot.val() });
             })
         nav.navigate(navscreen);

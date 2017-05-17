@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         case ITEM_SAVE:
             return { ...state, loading: true, error: '', confirm: '', }
         case ITEM_SAVE_SUCCESS:
-            return { ...state, ...initialState, confirm: 1 }
+            return { ...state, loading: false, error: '', confirm: 1 }
         case ITEM_SAVE_FAIL:
             return { ...state, loading: false, error: 'Item Save Failed, please try again' }
         default:
