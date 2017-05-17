@@ -9,6 +9,7 @@ import DayScreen from '../screens/DayScreen';
 import EquipmentScreen from '../screens/EquipmentScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import NewEquipmentScreen from '../screens/NewEquipmentScreen';
+import EquipmentDetails from '../screens/EquipmentDetails';
 
 const EquipmentStack = StackNavigator({
     EquipmentScreen: {
@@ -17,8 +18,11 @@ const EquipmentStack = StackNavigator({
     NewEquipmentScreen: {
         screen: NewEquipmentScreen,
     },
+    EquipmentDetails: {
+        screen: EquipmentDetails,
+    }
     }, {
-        initialRouteName: 'NewEquipmentScreen',
+        initialRouteName: 'EquipmentScreen',
         navigationOptions: {
             gesturesEnabled: false,
             tabBarLabel: 'Supplies',

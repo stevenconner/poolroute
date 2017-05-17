@@ -1,27 +1,35 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { Header } from '../components/common';
+import SuppliesItem from '../components/SuppliesItem';
 
 class EquipmentScreen extends React.Component {
 
+    renderItem(item) {
+        return <SuppliesItem item={item} onPress={() => this.props.navigation.navigate('EquipmentDetails', { item: item })} />
+    }
+
+    _keyExtractor = (item, index) => item.uid;
+
     render() {
+        console.log('here is data', this.props)
         return (
             <View style={styles.containerStyle}>
-                <View style={styles.headerStyle}>
-                    <View style={{flex: 0.33}}>
-
-                    </View>
-                    <View style={{ flex: 0.33, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ paddingTop: 15, fontSize: 18, fontWeight: 'bold' }}>Supplies</Text>
-                    </View>
-                    <View style={{ flex: 0.33, alignItems: 'flex-end', justifyContent: 'center' }}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('NewEquipmentScreen')}>
-                            <Text style={{ color: '#007aff', fontSize: 16, paddingTop: 15, paddingRight: 10 }}>New</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <Header
+                    centerText={'Supplies'}
+                    rightPress={() => this.props.navigation.navigate('NewEquipmentScreen')}
+                    rightText={'New'}
+                />
                 <View style={styles.contentContainer}>
-                    <Text>This is the equipment screen</Text>
+                    <FlatList
+                        style={{ flex: 1 }}
+                        data={this.props.suppliesList}
+                        renderItem={({ item }) => this.renderItem(item)}
+                        keyExtractor={this._keyExtractor}
+                    />
                 </View>
             </View>
         )
@@ -33,19 +41,19 @@ const styles = {
         flex: 1,
         backgroundColor: '#fff',
     },
-    headerStyle: {
-        height: '10%',
-        flexDirection: 'row',
-        backgroundColor: '#f8f8f8',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        elevation: 2,
-    },
     contentContainer: {
         height: '90%',
         paddingHorizontal: 10,
+        paddingTop: 5
     }
 }
 
-export default EquipmentScreen;
+const mapStateToProps = state => {
+    const { root } = state.data;
+    const suppliesList = _.map(root.supplies, (val, uid) => {
+        return { ...val, uid }
+    })
+    return { root, suppliesList };
+}
+
+export default connect(mapStateToProps)(EquipmentScreen);

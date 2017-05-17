@@ -23,8 +23,8 @@ class SettingsScreen extends React.Component {
             <View style={styles.containerStyle}>
                 <Text>This is the settings screen</Text>
                 <Button
-                    style={{ borderColor: '#aa0000', marginTop: 20 }}
-                    textStyle={{ color: '#aa0000' }}
+                    style={{ borderColor: '#a00', marginTop: 20 }}
+                    textStyle={{ color: '#a00' }}
                     onPress={() => this.handleLogOut()}
                 >
                     Log Out

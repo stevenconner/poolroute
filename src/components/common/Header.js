@@ -1,33 +1,69 @@
 // Import libraries for making a Component
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 // Make a component
 const Header = (props) => {
-  const { textStyle, viewStyle } = styles;
-
   return (
-    <View style={viewStyle}>
-      <Text style={textStyle}>{props.headerText}</Text>
+    <View style={styles.viewStyle}>
+      <View style={styles.leftViewStyle}>
+        <TouchableOpacity onPress={props.leftPress}>
+          <Text style={styles.leftTextStyle}>{props.leftText}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.centerViewStyle}>
+        <Text style={styles.centerTextStyle}>{props.centerText}</Text>
+      </View>
+      <View style={styles.rightViewStyle}>
+        <TouchableOpacity onPress={props.rightPress}>
+          <Text style={styles.rightTextStyle}>{props.rightText}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = {
   viewStyle: {
-    backgroundColor: '#F8F8F8',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 60,
-    paddingTop: 15,
+    height: '10%',
+    flexDirection: 'row',
+    backgroundColor: '#f8f8f8',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    position: 'relative'
   },
-  textStyle: {
-    fontSize: 20
+  leftViewStyle: {
+    flex: 0.33,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  leftTextStyle: {
+    color: '#007aff',
+    fontSize: 18,
+    paddingTop: 18,
+    paddingLeft: 15,
+  },
+  centerViewStyle: {
+    flex: 0.33,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centerTextStyle: {
+    fontSize: 20,
+    paddingTop: 15,
+    fontWeight: 'bold'
+  },
+  rightViewStyle: {
+    flex: 0.33,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  rightTextStyle: {
+    color: '#007aff',
+    fontSize: 18,
+    paddingTop: 18,
+    paddingRight: 15,
   }
 };
 

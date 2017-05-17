@@ -38,3 +38,23 @@ export const saveNewItem = (value) => {
             })
     }
 }
+
+export const updateItem = (uid, value) => {
+    console.log('updateItem fired!');
+    let { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        firebase.database().ref(`/${currentUser.uid}/supplies/${uid}`)
+            .update(value);
+    }
+}
+
+export const deleteItem = (uid) => {
+    console.log('deleteItem fired!');
+    let { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        firebase.database().ref(`/${currentUser.uid}/supplies/${uid}`)
+            .remove()
+    }
+}
