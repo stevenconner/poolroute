@@ -13,3 +13,6 @@ export const CLIENT_SAVE = 'client_save';
 export const CLIENT_SAVE_SUCCESS = 'client_save_success';
 export const CLIENT_SAVE_FAIL = 'client_save_fail';
 export const SELECT_CLIENT = 'select_client';
+
+// Types for day actions
+export const PULL_DAY = 'pull_day';

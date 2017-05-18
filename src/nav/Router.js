@@ -112,7 +112,7 @@ const TabsNavigator = TabNavigator({
         }
     }
     }, {
-        initialRouteName: 'Clients',
+        initialRouteName: 'DayScreen',
     });
 
 
