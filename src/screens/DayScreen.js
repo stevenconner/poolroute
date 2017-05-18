@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeDay } from '../actions';
+import { makeDay, updateQueue } from '../actions';
 import _ from 'lodash';
 
 import { View, Text, FlatList } from 'react-native';
@@ -82,16 +82,43 @@ const mapStateToProps = state => {
     } else if (!isEmpty(root)) {
         console.log('here it is');
         if (root.day.dayOfWeek != new Date().getDay()) {
+            // Update the day in firebase
+            // makeDay();
             // Map the clients to an object
+            console.log('here is clientlist before mapping', root.clients);
             clientList = _.map(root.clients, (val, uid) => {
                 return { ...val, uid }
             })
+            console.log('clientlist after mapping', clientList);
             // Splice the client out if their service day isn't today
             for (i = clientList.length - 1; i >= 0; i -= 1) {
                 if (!matchDay(clientList[i].serviceDay)) {
                     clientList.splice(i, 1);
                 }
             }
+            console.log('clientList after splicing', clientList);
+            // Reduce the map to a pojo so we can add queue to it.
+            let pojo = _.reduce(clientList, function (hash, value) {
+                var key = value['uid']
+                hash[key] = {
+                    name: value['name'],
+                    address: value['address'],
+                    phone: value['phone'],
+                    serviceDay: value['serviceDay'],
+                    type: value['type'],
+                }
+                return hash;
+            }, {});
+            // Take whatever clients are still in queue and add them to list
+            if (root.day.queue) {
+                clientList = Object.assign(pojo, root.day.queue);
+            }
+            console.log('here is clientList after assigning queue', clientList);
+            //updateQueue(pojo);
+            clientList = _.map(root.clients, (val, uid) => {
+                return { ...val, uid }
+            })
+            console.log('here is clientList after mapping again', clientList);
             // Sort through the clients and rearrange them alphabetically
             clientList.sort(function (a, b) {
                 let textA = a.name.toUpperCase();
@@ -100,8 +127,6 @@ const mapStateToProps = state => {
             })
         }
     }
-    console.log('root', root);
-    console.log('clientList', clientList);
 
     return { root, clientList };
 }
