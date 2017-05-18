@@ -10,6 +10,7 @@ import Menu, { MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-n
 class NewClientScreen extends React.Component {
     state = {
         accountType: 'Account Type',
+        serviceDay: 'Select Service Day',
         name: '',
         address: '',
         phone: '',
@@ -19,6 +20,7 @@ class NewClientScreen extends React.Component {
     handleSavePress() {
         let value = {
             type: this.state.accountType,
+            serviceDay: this.state.serviceDay,
             name: this.state.name,
             address: this.state.address,
             phone: this.state.phone,
@@ -86,6 +88,34 @@ class NewClientScreen extends React.Component {
                             </MenuOption>
                             <MenuOption value={'Chemical Only'}>
                                 <Text>Chemical Only</Text>
+                            </MenuOption>
+                        </MenuOptions>
+                    </Menu>
+                    <Menu onSelect={(value) => this.setState({ serviceDay: value })}>
+                        <MenuTrigger style={styles.menuTriggerStyle}>
+                            <Text style={{ fontSize: 18 }}>{this.state.serviceDay}</Text>
+                        </MenuTrigger>
+                        <MenuOptions optionsContainerStyle={{ width: '95%' }} >
+                            <MenuOption value={'Monday'}>
+                                <Text>Monday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Tuesday'}>
+                                <Text>Tuesday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Wednesday'}>
+                                <Text>Wednesday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Thursday'}>
+                                <Text>Thursday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Friday'}>
+                                <Text>Friday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Saturday'}>
+                                <Text>Saturday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Sunday'}>
+                                <Text>Sunday</Text>
                             </MenuOption>
                         </MenuOptions>
                     </Menu>

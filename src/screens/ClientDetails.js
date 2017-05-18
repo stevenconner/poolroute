@@ -17,6 +17,7 @@ class ClientDetails extends React.Component {
         address: '',
         phone: '',
         accountType: '',
+        serviceDay: '',
         error: '',
         appliedEquipment: {},
     }
@@ -28,6 +29,7 @@ class ClientDetails extends React.Component {
             address: item.address,
             phone: item.phone,
             accountType: item.type,
+            serviceDay: item.serviceDay,
         })
     }
 
@@ -146,6 +148,34 @@ class ClientDetails extends React.Component {
                             </MenuOption>
                         </MenuOptions>
                     </Menu>
+                    <Menu onSelect={(value) => this.setState({ serviceDay: value })}>
+                        <MenuTrigger style={styles.menuTriggerStyle}>
+                            <Text style={{ fontSize: 18 }}>{this.state.serviceDay}</Text>
+                        </MenuTrigger>
+                        <MenuOptions optionsContainerStyle={{ width: '95%' }} >
+                            <MenuOption value={'Monday'}>
+                                <Text>Monday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Tuesday'}>
+                                <Text>Tuesday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Wednesday'}>
+                                <Text>Wednesday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Thursday'}>
+                                <Text>Thursday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Friday'}>
+                                <Text>Friday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Saturday'}>
+                                <Text>Saturday</Text>
+                            </MenuOption>
+                            <MenuOption value={'Sunday'}>
+                                <Text>Sunday</Text>
+                            </MenuOption>
+                        </MenuOptions>
+                    </Menu>
                     <Text style={styles.errorText}>{[this.props.error, this.state.error]}</Text>
                     <View style={styles.buttonContainer}>
                         <Button onPress={() => this.handleSavePress()}>Save</Button>
@@ -166,6 +196,7 @@ class ClientDetails extends React.Component {
                     <Text style={styles.textStyle}>{item.address}</Text>
                     <Text style={styles.textStyle}>{item.phone}</Text>
                     <Text style={[styles.textStyle, { marginTop: 20 }]}>Account Type: {item.type}</Text>
+                    <Text style={styles.textStyle}>Service Day: {item.serviceDay}</Text>
                     <Text style={[styles.textStyle, { marginTop: 20, fontWeight: 'bold' }]}>- Assigned Equipment -</Text>
                     <FlatList
                         style={{ width: '100%' }}
@@ -226,7 +257,7 @@ const styles = {
         paddingTop: 15,
     },
     textStyle: {
-        fontSize: 18,
+        fontSize: 20,
     },
     errorText: {
         alignSelf: 'center',
