@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { selectClient } from '../actions';
 
 import { View, Text, TouchableOpacity, SectionList } from 'react-native';
 import { Header } from '../components/common';
@@ -8,7 +9,10 @@ import ClientItem from '../components/ClientItem';
 
 class ClientList extends React.Component {
     renderItem(item) {
-        return <ClientItem item={item} onPress={() => this.props.navigation.navigate('ClientDetails', { item: item })} />
+        return <ClientItem item={item} onPress={() => {
+            this.props.selectClient(item.uid);
+            this.props.navigation.navigate('ClientDetails', { item: item })
+        }} />
     }
 
     renderHeader(item) {
@@ -82,4 +86,4 @@ const mapStateToProps = state => {
     return { root, clientList };
 }
 
-export default connect(mapStateToProps)(ClientList);
+export default connect(mapStateToProps, { selectClient })(ClientList);

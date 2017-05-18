@@ -6,6 +6,7 @@ import {
     CLIENT_SAVE,
     CLIENT_SAVE_FAIL,
     CLIENT_SAVE_SUCCESS,
+    SELECT_CLIENT
 } from '../../actions/types';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     loading: false,
     error: '',
     confirm: '',
+    selectedClient: '',
 }
 
 export default (state = initialState, action) => {
@@ -31,6 +33,8 @@ export default (state = initialState, action) => {
             return { ...state, loading: false, error: '', confirm: 1 }
         case CLIENT_SAVE_FAIL:
             return { ...state, loading: false, error: 'Client Save Failed, please try again' }
+        case SELECT_CLIENT:
+            return { ...state, selectedClient: action.payload }
         default:
             return state;
     }

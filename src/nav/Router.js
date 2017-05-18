@@ -22,6 +22,9 @@ const ClientStack = StackNavigator({
     },
     ClientDetails: {
         screen: ClientDetails,
+    },
+    ClientEquipmentDetails: {
+        screen: EquipmentDetails,
     }
     }, {
         initialRouteName: 'ClientList',
