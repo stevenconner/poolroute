@@ -13,6 +13,31 @@ import EquipmentDetails from '../screens/EquipmentDetails';
 import NewClientScreen from '../screens/NewClientScreen';
 import ClientDetails from '../screens/ClientDetails';
 
+const TodayStack = StackNavigator({
+    TodayScreen: {
+        screen: DayScreen,
+    },
+    TodayClientDetails: {
+        screen: ClientDetails,
+    }
+}, {
+        initialRouteName: 'TodayScreen',
+        mode: 'card',
+        navigationOptions: {
+        gesturesEnabled: false,
+        header: null,
+        tabBarLabel: 'Today',
+        tabBarIcon: ({ tintColor }) => (
+            <Icon
+                name='calendar-today'
+                type='material-community'
+                color={tintColor}
+                size={30}
+            />
+        )
+    }
+})
+
 const ClientStack = StackNavigator({
     ClientList: {
         screen: ClientList,
@@ -74,20 +99,7 @@ const EquipmentStack = StackNavigator({
 
 const TabsNavigator = TabNavigator({
     DayScreen: {
-        screen: DayScreen,
-        navigationOptions: {
-            gesturesEnabled: false,
-            header: null,
-            tabBarLabel: 'Today',
-            tabBarIcon: ({ tintColor }) => (
-                <Icon
-                    name='calendar-today'
-                    type='material-community'
-                    color={tintColor}
-                    size={30}
-                />
-            )
-        }
+        screen: TodayStack,
     },
     Clients: {
         screen: ClientStack,
@@ -113,6 +125,8 @@ const TabsNavigator = TabNavigator({
     }
     }, {
         initialRouteName: 'DayScreen',
+        tabBarPosition: 'bottom',
+        lazy: true,
     });
 
 

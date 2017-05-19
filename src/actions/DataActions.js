@@ -21,6 +21,13 @@ export const watchUserData = (nav, navscreen) => {
             .on('value', snapshot => {
                 console.log('here is snapshot', snapshot.val())
                 dispatch({ type: WATCH_USER_DATA, payload: snapshot.val() });
+                let snap = snapshot.val();
+                if (!snap.hasOwnProperty('userInfo')) {
+                    let currentLocation = navigator.geolocation.getCurrentPosition((response) => {
+                        firebase.database().ref(`/${currentUser.uid}/userInfo`)
+                            .update({endingLocation: `${response.coords.latitude},${response.coords.longitude}`})
+                    })
+                }
             })
         nav.navigate(navscreen);
     }
@@ -118,5 +125,17 @@ export const deleteItem = (uid) => {
     return (dispatch) => {
         firebase.database().ref(`/${currentUser.uid}/supplies/${uid}`)
             .remove()
+    }
+}
+
+export const updateEndingLocation = (location) => {
+    console.log('updateEndingLocation fired!');
+    let { currentUser } = firebase.auth();
+    let obj = {};
+    obj['endingLocation'] = location
+
+    return (dispatch) => {
+        firebase.database().ref(`/${currentUser.uid}/userInfo`)
+            .update(obj)
     }
 }

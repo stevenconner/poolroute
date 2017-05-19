@@ -1,16 +1,53 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeDay, updateQueue } from '../actions';
+import { makeDay, updateQueue, selectClient } from '../actions';
 import _ from 'lodash';
 
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Linking } from 'react-native';
 import { Header } from '../components/common';
-import ClientItem from '../components/ClientItem';
+import DayItem from '../components/DayItem';
 
 class DayScreen extends React.Component {
+    state = {
+        optimizedRoute: '',
+    }
 
     renderItem(item) {
-        return <ClientItem item={item} />
+        return <DayItem item={item} onPress={() => {
+            this.props.selectClient(item.uid);
+            this.props.navigation.navigate('TodayClientDetails', { item: item })
+        }} />
+    }
+
+    doRoute() {
+        var addressesString = '';
+        var route;
+        for (i = 0; i < this.props.clientList.length; i++) {
+            console.log('this is i', i)
+            addressesString = addressesString + '|' + this.props.clientList[i].address;
+        }
+        console.log('here is the address string', addressesString);
+        let newAddress = addressesString.replace(/ /g, '+');
+        console.log('here is newAddress', newAddress);
+        let currentLocation = navigator.geolocation.getCurrentPosition((response) => {
+            console.log('this is the currentlocation', response)
+            let googleResponse = fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${response.coords.latitude},${response.coords.longitude}&destination=${this.props.root.userInfo.endingLocation}&waypoints=optimize:true${newAddress}`)
+                .then((response) => response.json())
+                .catch((error) => console.warn('fetch error', error))
+                .then((responseJson) => {
+                    route = responseJson.routes[0].waypoint_order;
+                    console.log('this is the route', route);
+                    console.log('this is clientList', this.props.clientList);
+                    let optimizedList = [];
+                    for (i = 0; i < route.length; i++) {
+                        let index = route[i];
+                        console.log('here is the match', this.props.clientList[index]);
+                        optimizedList.push(this.props.clientList[index]);
+                    }
+                    console.log('here is optimizedList', optimizedList);
+                    this.setState({ optimizedRoute: optimizedList });
+                });
+        })
     }
 
     _keyExtractor = (item, index) => item.uid;
@@ -20,7 +57,7 @@ class DayScreen extends React.Component {
             return (
                 <FlatList
                     style={{ width: '100%' }}
-                    data={this.props.clientList}
+                    data={(this.state.optimizedRoute != '') ? this.state.optimizedRoute : this.props.clientList}
                     renderItem={({ item }) => this.renderItem(item)}
                     keyExtractor={this._keyExtractor}
                     removeClippedSubviews={false}
@@ -42,6 +79,7 @@ class DayScreen extends React.Component {
                 <Header
                     centerText={'Today'}
                     rightText={'Route'}
+                    rightPress={() => this.doRoute()}
                 />
                 <View style={styles.contentContainer}>
                     {this.renderList()}
@@ -125,10 +163,21 @@ const mapStateToProps = state => {
                 let textB = a.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
             })
+        } else {
+            // Map the clients to an object
+            clientList = _.map(root.day.queue, (val, uid) => {
+                return { ...val, uid }
+            })
+            // Sort through the clients an rearrange them alphabetically
+            clientList.sort(function (a, b) {
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
         }
     }
 
     return { root, clientList };
 }
 
-export default connect(mapStateToProps, { makeDay })(DayScreen);
+export default connect(mapStateToProps, { makeDay, selectClient })(DayScreen);
