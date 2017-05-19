@@ -83,7 +83,7 @@ const mapStateToProps = state => {
         console.log('here it is');
         if (root.day.dayOfWeek != new Date().getDay()) {
             // Update the day in firebase
-            // makeDay();
+            makeDay();
             // Map the clients to an object
             console.log('here is clientlist before mapping', root.clients);
             clientList = _.map(root.clients, (val, uid) => {
@@ -114,8 +114,8 @@ const mapStateToProps = state => {
                 clientList = Object.assign(pojo, root.day.queue);
             }
             console.log('here is clientList after assigning queue', clientList);
-            //updateQueue(pojo);
-            clientList = _.map(root.clients, (val, uid) => {
+            updateQueue(pojo);
+            clientList = _.map(clientList, (val, uid) => {
                 return { ...val, uid }
             })
             console.log('here is clientList after mapping again', clientList);

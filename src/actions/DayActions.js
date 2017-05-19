@@ -21,11 +21,8 @@ export const makeDay = () => {
     obj['day'] = {
         dayOfWeek: new Date().getDay(),
     }
-
-    return (dispatch) => {
-        firebase.database().ref(`/${currentUser.uid}`)
-            .update(obj)
-    }
+    firebase.database().ref(`/${currentUser.uid}`)
+        .update(obj)
 }
 
 export const updateQueue = (clientList) => {
@@ -33,6 +30,8 @@ export const updateQueue = (clientList) => {
     let { currentUser } = firebase.auth();
     let obj = {};
     obj['queue'] = clientList;
+     firebase.database().ref(`/${currentUser.uid}/day/queue`)
+         .remove();
     firebase.database().ref(`/${currentUser.uid}/day`)
         .update(obj)
         .catch((error) => console.log('here is the firebase error', error))
