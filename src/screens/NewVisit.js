@@ -9,6 +9,7 @@ import { Header, Button } from '../components/common';
 class NewVisit extends React.Component {
     state = {
         modalVisible: false,
+        selectedSupplies: [],
     }
 
     setModalVisible(visible) {
@@ -19,26 +20,26 @@ class NewVisit extends React.Component {
         return <SuppliesItem item={item} onPress={() => this.rowPress(item)} />
     }
 
+    renderItem(item) {
+        return <SuppliesItem 
+        item={item} 
+        newVisit={true} />
+    }
+
     _keyExtractor = (item, index) => item.uid;
 
     rowPress(item) {
-        let client = this.props.navigation.state.params.item;
-        console.log('this is the client', client);
-        Alert.alert(
-            'Assigning Equipment',
-            `Are you sure you want to assign ${item.name} to ${client.name}?`,
-            [
-                { text: 'No', onPress: () => console.log('Cancel Pressed!') },
-                {
-                    text: 'Yes', onPress: () => {
-                        console.log('Yes pressed!');
-                }}
-            ]
-        )
+        this.addToSupplies(item);
+        this.setModalVisible(false);
+    }
+
+    addToSupplies(item) {
+        this.state.selectedSupplies.push(item)
     }
 
     render() {
         console.log('here is newvisit props', this.props);
+        console.log('here is newvisit state', this.state);
         let { item } = this.props.navigation.state.params;
         return (
             <View style={styles.containerStyle}>
@@ -49,28 +50,36 @@ class NewVisit extends React.Component {
                 />
                 <View style={styles.contentContainer}>
                     <Text style={styles.textStyle}>New Visit for {item.name}</Text>
+                    <Text style={[styles.textStyle, { marginTop: 20, fontWeight: 'bold' }]}>- Assigned Equipment -</Text>
+                    <FlatList
+                        style={{ width: '100%' }}
+                        data={this.state.selectedSupplies}
+                        renderItem={({ item }) => this.renderItem(item)}
+                        keyExtractor={this._keyExtractor}
+                        removeClippedSubviews={false}
+                    />
                     <Button 
                     onPress={() => this.setModalVisible(true)}
-                    style={{ marginTop: 15 }}>Add Supplies</Button>
+                    style={{ marginTop: 15, marginBottom: 10 }}>Add Supplies</Button>
                 </View>
                 <Modal
-                        animationType={'fade'}
-                        transparent={false}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => console.log('modal closed')}
-                    >
-                        <View style={styles.modalStyle}>
-                            <Text>Choose Supplies</Text>
-                            <FlatList
-                                style={{ width: '100%' }}
-                                data={this.props.suppliesList}
-                                renderItem={({ item }) => this.renderModalItem(item)}
-                                keyExtractor={this._keyExtractor}
-                                removeClippedSubviews={false}
-                            />
-                            <Button onPress={() => this.setModalVisible(false)}>Close</Button>
-                        </View>
-                    </Modal>
+                    animationType={'fade'}
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => console.log('modal closed')}
+                >
+                    <View style={styles.modalStyle}>
+                        <Text>Choose Supplies</Text>
+                        <FlatList
+                            style={{ width: '100%' }}
+                            data={this.props.suppliesList}
+                            renderItem={({ item }) => this.renderModalItem(item)}
+                            keyExtractor={this._keyExtractor}
+                            removeClippedSubviews={false}
+                        />
+                        <Button onPress={() => this.setModalVisible(false)}>Close</Button>
+                    </View>
+                </Modal>
             </View>
         )
     }
