@@ -12,6 +12,7 @@ import NewEquipmentScreen from '../screens/NewEquipmentScreen';
 import EquipmentDetails from '../screens/EquipmentDetails';
 import NewClientScreen from '../screens/NewClientScreen';
 import ClientDetails from '../screens/ClientDetails';
+import NewVisit from '../screens/NewVisit';
 
 const TodayStack = StackNavigator({
     TodayScreen: {
@@ -19,6 +20,9 @@ const TodayStack = StackNavigator({
     },
     TodayClientDetails: {
         screen: ClientDetails,
+    },
+    TodayNewVisit: {
+        screen: NewVisit,
     }
 }, {
         initialRouteName: 'TodayScreen',

@@ -20,6 +20,7 @@ class DayScreen extends React.Component {
             this.props.navigation.navigate('TodayClientDetails', { item: item })
         }} 
         onRemove={() => this.props.removeFromQueue(item.uid)}
+        onNewVisit={() => this.props.navigation.navigate('TodayNewVisit', { item: item })}
         />
     }
 
@@ -82,7 +83,7 @@ class DayScreen extends React.Component {
             <View style={styles.containerStyle}>
                 <Header
                     centerText={'Today'}
-                    rightText={'Route'}
+                    rightText={'Optimize'}
                     rightPress={() => this.doRoute()}
                 />
                 <View style={styles.contentContainer}>

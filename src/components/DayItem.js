@@ -17,11 +17,6 @@ class DayItem extends React.Component {
         })
     }
 
-    handleRemovePress() {
-        let { uid } = this.props.item;
-        this.props.removeFromQueue(uid);
-    }
-
     render() {
         console.log('here is props', this.props);
         let { name, address, city, state, phone, type } = this.props.item;
@@ -32,7 +27,9 @@ class DayItem extends React.Component {
                     <Text style={styles.textStyle}>{name}</Text>
                     <View style={styles.buttonContainer}>
                         <Button onPress={() => this.handleDirectionsPress()}>Directions</Button>
-                        <Button>New Visit</Button>
+                        <Button
+                            onPress={this.props.onNewVisit}
+                        >New Visit</Button>
                         <Button
                             style={{ borderColor: '#a00' }}
                             textStyle={{ color: '#a00' }}
