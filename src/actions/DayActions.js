@@ -30,9 +30,18 @@ export const updateQueue = (clientList) => {
     let { currentUser } = firebase.auth();
     let obj = {};
     obj['queue'] = clientList;
-     firebase.database().ref(`/${currentUser.uid}/day/queue`)
+    firebase.database().ref(`/${currentUser.uid}/day/queue`)
          .remove();
     firebase.database().ref(`/${currentUser.uid}/day`)
         .update(obj)
         .catch((error) => console.log('here is the firebase error', error))
+}
+
+export const removeFromQueue = (uid) => {
+    console.log('removeFromQueue fired!', uid);
+    let { currentUser } = firebase.auth();
+    return (dispatch) => {
+        firebase.database().ref(`/${currentUser.uid}/day/queue/${uid}`)
+            .remove();
+    }
 }

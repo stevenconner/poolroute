@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { removeFromQueue } from '../actions';
 
 import { View, Text, TouchableWithoutFeedback, Linking } from 'react-native';
 import { Button } from './common';
@@ -15,7 +17,13 @@ class DayItem extends React.Component {
         })
     }
 
+    handleRemovePress() {
+        let { uid } = this.props.item;
+        this.props.removeFromQueue(uid);
+    }
+
     render() {
+        console.log('here is props', this.props);
         let { name, address, city, state, phone, type } = this.props.item;
 
         return (
@@ -28,6 +36,7 @@ class DayItem extends React.Component {
                         <Button
                             style={{ borderColor: '#a00' }}
                             textStyle={{ color: '#a00' }}
+                            onPress={this.props.onRemove}
                         >
                             Remove
                         </Button>
@@ -62,4 +71,4 @@ const styles = {
     }
 }
 
-export default DayItem;
+export default connect(null, { removeFromQueue })(DayItem);

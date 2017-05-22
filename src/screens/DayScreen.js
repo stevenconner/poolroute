@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeDay, updateQueue, selectClient } from '../actions';
+import { makeDay, updateQueue, selectClient, removeFromQueue } from '../actions';
 import _ from 'lodash';
 
 import { View, Text, FlatList, Linking } from 'react-native';
@@ -13,10 +13,14 @@ class DayScreen extends React.Component {
     }
 
     renderItem(item) {
-        return <DayItem item={item} onPress={() => {
+        return <DayItem 
+        item={item} 
+        onPress={() => {
             this.props.selectClient(item.uid);
             this.props.navigation.navigate('TodayClientDetails', { item: item })
-        }} />
+        }} 
+        onRemove={() => this.props.removeFromQueue(item.uid)}
+        />
     }
 
     doRoute() {
@@ -180,4 +184,4 @@ const mapStateToProps = state => {
     return { root, clientList };
 }
 
-export default connect(mapStateToProps, { makeDay, selectClient })(DayScreen);
+export default connect(mapStateToProps, { makeDay, selectClient, removeFromQueue })(DayScreen);
