@@ -20,7 +20,9 @@ class DayScreen extends React.Component {
             this.props.navigation.navigate('TodayClientDetails', { item: item })
         }} 
         onRemove={() => this.props.removeFromQueue(item.uid)}
-        onNewVisit={() => this.props.navigation.navigate('TodayNewVisit', { item: item })}
+        onNewVisit={() => {
+            this.props.selectClient(item.uid);
+            this.props.navigation.navigate('TodayNewVisit', { item: item })}}
         />
     }
 
