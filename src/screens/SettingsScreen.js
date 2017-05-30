@@ -15,6 +15,7 @@ class SettingsScreen extends React.Component {
         this.props.logOut();
         const resetAction = NavigationActions.reset({
             index: 0,
+            key: null,
             actions: [
                 NavigationActions.navigate({ routeName: 'LoginScreen' })
             ]
