@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeDay, updateQueue, selectClient, removeFromQueue } from '../actions';
 import _ from 'lodash';
+import { Location, Permissions } from 'expo';
 
 import { View, Text, FlatList, Linking } from 'react-native';
 import { Header } from '../components/common';
@@ -10,7 +11,24 @@ import DayItem from '../components/DayItem';
 class DayScreen extends React.Component {
     state = {
         optimizedRoute: '',
+        location: null,
+        errorMessage: '',
     }
+
+    componentWillMount() {
+        this._getLocationAsync();
+    }
+
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ location });
+    };
 
     renderItem(item) {
         return <DayItem 
@@ -30,18 +48,13 @@ class DayScreen extends React.Component {
         var addressesString = '';
         var route;
         for (i = 0; i < this.props.clientList.length; i++) {
-            console.log('this is i', i)
             addressesString = addressesString + '|' + this.props.clientList[i].address;
         }
-        console.log('here is the address string', addressesString);
         let newAddress = addressesString.replace(/ /g, '+');
-        console.log('here is newAddress', newAddress);
-        let currentLocation = navigator.geolocation.getCurrentPosition((response) => {
-            console.log('this is the currentlocation', response)
-            let googleResponse = fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${response.coords.latitude},${response.coords.longitude}&destination=${this.props.root.userInfo.endingLocation}&waypoints=optimize:true${newAddress}`)
-                .then((response) => response.json())
-                .catch((error) => console.warn('fetch error', error))
-                .then((responseJson) => {
+        let googleResponse = fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.location.coords.latitude},${this.state.location.coords.longitude}&destination=${this.props.root.userInfo.endingLocation}&waypoints=optimize:true${newAddress}`)
+            .then((response) => {
+                console.log('here is response', response);
+                response.json().then((responseJson) => {
                     route = responseJson.routes[0].waypoint_order;
                     console.log('this is the route', route);
                     console.log('this is clientList', this.props.clientList);
@@ -54,7 +67,7 @@ class DayScreen extends React.Component {
                     console.log('here is optimizedList', optimizedList);
                     this.setState({ optimizedRoute: optimizedList });
                 });
-        })
+            }).catch((error) => console.warn('fetch error', error))
     }
 
     _keyExtractor = (item, index) => item.uid;
@@ -125,23 +138,19 @@ const mapStateToProps = state => {
     if (!root.day && !isEmpty(root)) {
         makeDay();
     } else if (!isEmpty(root)) {
-        console.log('here it is');
         if (root.day.dayOfWeek != new Date().getDay()) {
             // Update the day in firebase
             makeDay();
             // Map the clients to an object
-            console.log('here is clientlist before mapping', root.clients);
             clientList = _.map(root.clients, (val, uid) => {
                 return { ...val, uid }
             })
-            console.log('clientlist after mapping', clientList);
             // Splice the client out if their service day isn't today
             for (i = clientList.length - 1; i >= 0; i -= 1) {
                 if (!matchDay(clientList[i].serviceDay)) {
                     clientList.splice(i, 1);
                 }
             }
-            console.log('clientList after splicing', clientList);
             // Reduce the map to a pojo so we can add queue to it.
             let pojo = _.reduce(clientList, function (hash, value) {
                 var key = value['uid']
@@ -158,12 +167,10 @@ const mapStateToProps = state => {
             if (root.day.queue) {
                 clientList = Object.assign(pojo, root.day.queue);
             }
-            console.log('here is clientList after assigning queue', clientList);
             updateQueue(pojo);
             clientList = _.map(clientList, (val, uid) => {
                 return { ...val, uid }
             })
-            console.log('here is clientList after mapping again', clientList);
             // Sort through the clients and rearrange them alphabetically
             clientList.sort(function (a, b) {
                 let textA = a.name.toUpperCase();

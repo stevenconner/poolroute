@@ -41,6 +41,7 @@ const styles = {
         borderBottomWidth: 1,
         borderColor: '#eee',
         paddingHorizontal: 10,
+        justifyContent: 'space-between'
     },
     textStyle: {
         fontSize: 20,

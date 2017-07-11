@@ -52,7 +52,7 @@ class NewVisit extends React.Component {
                     <Text style={styles.textStyle}>New Visit for {item.name}</Text>
                     <Text style={[styles.textStyle, { marginTop: 20, fontWeight: 'bold' }]}>- Assigned Equipment -</Text>
                     <FlatList
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', paddingTop: 5 }}
                         data={this.state.selectedSupplies}
                         renderItem={({ item }) => this.renderItem(item)}
                         keyExtractor={this._keyExtractor}
